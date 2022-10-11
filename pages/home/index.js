@@ -44,18 +44,15 @@ function criarCard(objeto){
     })
 
     button.className = "botaoRoxo botaoCard"
-    button.innerText = "Candidatar"
+    
+    if(existeVagaSelecionada(objeto) >= 0){
+      button.innerText = "Remover Candidatura"
+    }else{
+      button.innerText = "Candidatar"
+    }
 
     button.addEventListener("click", ()=>{
-        const vagaSelecionada = jobsData.find(vaga =>{
-          if(id === vaga.id){
-            return vaga
-          }
-        })
-        const listaVagasSelecionadas = buscarArrayLocalStorage()
-        listaVagasSelecionadas.push(vagaSelecionada)
-        localStorage.setItem("@vagas:vagaselecionada", JSON.stringify(listaVagasSelecionadas))
-        renderizarCardsSelecionados(listaVagasSelecionadas)
+      excluirCandidatar(objeto, button)
     })
 
     li.append(h2, div1, p3, div2)
@@ -64,6 +61,30 @@ function criarCard(objeto){
     return li
 }
 
+function excluirCandidatar(objeto, botao){
+    const listaVagasSelecionadas = buscarArrayLocalStorage()
+    const index = existeVagaSelecionada(objeto)
+    if(index === -1){
+      listaVagasSelecionadas.push(objeto)
+      localStorage.setItem("@vagas:vagaselecionada", JSON.stringify(listaVagasSelecionadas))
+      renderizarCardsSelecionados(listaVagasSelecionadas)
+      botao.innerText = "Remover Candidatura"
+    }else{
+      excluirVaga(index)
+      botao.innerText = "Candidatar"
+    }
+    mensagemPadrao()
+}
+
+function existeVagaSelecionada(objeto){
+  const listaVagasSelecionadas = buscarArrayLocalStorage()
+  const index = listaVagasSelecionadas.findIndex((elemento) =>{
+    if(elemento.id === objeto.id){
+        return elemento
+    }
+  })
+  return index
+}
 
 
 

@@ -26,15 +26,9 @@ function criarCardSelecionado(objeto){
     button.className = "botaoExcluir"
 
     button.addEventListener("click", ()=>{
-        const listaVagasSelecionadas = buscarArrayLocalStorage()
-        const vagaExcluir = listaVagasSelecionadas.findIndex((elemento) =>{
-          if(elemento.id === id){
-           return elemento
-          }
-        })
-        listaVagasSelecionadas.splice(vagaExcluir, 1)
-        localStorage.setItem("@vagas:vagaselecionada", JSON.stringify(listaVagasSelecionadas))
-        renderizarCardsSelecionados(listaVagasSelecionadas)
+        const existeVaga = existeVagaSelecionada(objeto)
+        excluirVaga(existeVaga)
+        renderizarCards(jobsData)
         mensagemPadrao()
     })
     img.src = "./assets/img/trash.png"
@@ -49,6 +43,14 @@ function criarCardSelecionado(objeto){
     return li
 }
 
+function excluirVaga(index){
+    const listaVagasSelecionadas = buscarArrayLocalStorage()
+    if(index >= 0){
+        listaVagasSelecionadas.splice(index, 1)
+        localStorage.setItem("@vagas:vagaselecionada", JSON.stringify(listaVagasSelecionadas))
+        renderizarCardsSelecionados(listaVagasSelecionadas)
+    }
+}
 
 function mensagemPadrao(){
     if(document.querySelector(".cardSelecionados") === null){
@@ -58,9 +60,8 @@ function mensagemPadrao(){
         </li>
     `)
     }else{
-        const mensagem = document.querySelector(".mensagemPadrao")
-        mensagem.remove()
-    }   
+        document.querySelector(".mensagemPadrao").remove()
+    } 
   }
   mensagemPadrao()
   
